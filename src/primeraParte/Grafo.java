@@ -48,9 +48,4 @@ public interface Grafo<T> {
 
     public Integer obtenerVerticeRandom();
 
-    public List<Integer> dfsForest();
-
-    public List<Integer> bfsForest(Integer vertice);
-
-
 }

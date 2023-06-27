@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ServicioBFS<T> {
-    private Grafo<?> grafo;
+    private final Grafo<?> grafo;
     protected HashMap<Integer, Boolean> visitados;
 
 
@@ -19,9 +19,16 @@ public class ServicioBFS<T> {
     }
 
 
-    public List<Integer> bfsForest(Integer startingNode){
-
-        return this.grafo.bfsForest(startingNode);
+    public List<Integer> bfsForest(){
+        List<Integer> resultado = new ArrayList<>();
+        this.visitados.clear();
+        for (Iterator<Integer> it = grafo.obtenerVertices();it.hasNext();) {
+            Integer nodo = it.next();
+            if (!resultado.contains(nodo)){
+                resultado.addAll(getBfsForest(nodo));
+            }
+        }
+        return resultado;
     }
 
 

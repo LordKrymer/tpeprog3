@@ -34,8 +34,8 @@ public class Main {
 
         ServicioBFS<Integer> servicioVip = new ServicioBFS<>(grafito);
         ServicioCaminos caminos = new ServicioCaminos(grafito,12,12,11);
-        List<Integer> lista = servicioVip.bfsForest(2);
-        List<Integer> lista2 = servicioVip.bfsForest(19);
+        List<Integer> lista = servicioVip.bfsForest();
+        List<Integer> lista2 = servicioVip.bfsForest();
 
         ServicioDFS<Integer> servicioVip2 = new ServicioDFS<>(grafito);
 

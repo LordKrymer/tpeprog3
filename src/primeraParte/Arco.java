@@ -2,8 +2,8 @@ package primeraParte;
 
 public class Arco<T> {
 
-    private int verticeOrigen;
-    private int verticeDestino;
+    private Integer verticeOrigen;
+    private Integer verticeDestino;
     private T etiqueta;
 
     public Arco(int verticeOrigen, int verticeDestino, T etiqueta) {
@@ -22,6 +22,10 @@ public class Arco<T> {
 
     public T getEtiqueta() {
         return etiqueta;
+    }
+
+    public String toString(){
+        return ("S " + this.verticeOrigen.toString() + "- D " + this.verticeDestino.toString() + " weigth: "+ this.etiqueta);
     }
 
 }
