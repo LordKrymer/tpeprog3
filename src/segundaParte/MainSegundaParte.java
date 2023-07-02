@@ -19,7 +19,6 @@ public class MainSegundaParte {
         long totalTimeBacktracking = endTimeBacktracking - startTimeBacktracking;
         System.out.println("Tiempo de ejecución backtracking : " + totalTimeBacktracking + " nanosegundos");
 
-
         System.out.println("-----------------------------------------DATASET 2----------------------------------------------");
 
         long startTimeBacktracking2 = System.nanoTime();
@@ -43,5 +42,26 @@ public class MainSegundaParte {
         long endTimeBacktracking3 = System.nanoTime();
         long totalTimeBacktracking3 = endTimeBacktracking3 - startTimeBacktracking3;
         System.out.println("Tiempo de ejecución backtracking2 : " + totalTimeBacktracking3 + " nanosegundos");*/
+
+        System.out.println("-----------------------------------------Greedy----------------------------------------------");
+
+        System.out.println("-----------------------------------------DATASET 1 ----------------------------------------------");
+        ProblemaTunnel greedy1 = new ProblemaTunnel("src/segundaParte/datasets/dataset1.txt");
+        System.out.println(greedy1.greedySolution());
+        System.out.println("iteraciones: " + greedy1.getIteraciones());
+        System.out.println("Longitud: " + greedy1.getMinimumPathLength());
+        System.out.println("-----------------------------------------DATASET 2 ----------------------------------------------");
+
+        ProblemaTunnel greedy2 =new ProblemaTunnel("src/segundaParte/datasets/dataset2.txt");
+        System.out.println(greedy2.greedySolution());
+        System.out.println("iteraciones: " + greedy2.getIteraciones());
+        System.out.println("Longitud: " + greedy2.getMinimumPathLength());
+
+        System.out.println("-----------------------------------------DATASET 3 ----------------------------------------------");
+        ProblemaTunnel greedy3 =new ProblemaTunnel("src/segundaParte/datasets/dataset3.txt");
+        System.out.println(greedy3.greedySolution());
+        System.out.println("iteraciones: " + greedy3.getIteraciones());
+        System.out.println("Longitud: " + greedy3.getMinimumPathLength());
+
     }
 }

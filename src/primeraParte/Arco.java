@@ -1,6 +1,6 @@
 package primeraParte;
 
-public class Arco<T> {
+public class Arco<T> implements Comparable<Arco<T>> {
 
     private Integer verticeOrigen;
     private Integer verticeDestino;
@@ -28,4 +28,8 @@ public class Arco<T> {
         return ("S " + this.verticeOrigen.toString() + "- D " + this.verticeDestino.toString() + " weigth: "+ this.etiqueta);
     }
 
+    @Override
+    public int compareTo(Arco<T> o) {
+        return ((Integer) this.etiqueta) - ((Integer) o.getEtiqueta());
+    }
 }

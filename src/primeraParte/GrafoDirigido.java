@@ -110,6 +110,14 @@ public class GrafoDirigido<T> implements Grafo<T> {
             Integer[] keys = vertices.keySet().stream().mapToInt(Integer::intValue).boxed().toArray(Integer[]::new);
             return keys[(int) (Math.random() * keys.length)];
         }
+
+        public ArrayList<Arco<?>> getAllEdges(){
+            ArrayList<Arco<?>> resultado = new ArrayList<>();
+            vertices.forEach( (x,y) -> {
+                    resultado.addAll(y);
+            });
+            return new ArrayList<>(resultado.stream().sorted().toList());
+        }
 }
 
 

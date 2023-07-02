@@ -1,12 +1,12 @@
 package segundaParte;
 
 import primeraParte.Arco;
-import primeraParte.Grafo;
 import primeraParte.GrafoNoDirigido;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ProblemaTunnel {
 
@@ -30,7 +30,7 @@ public class ProblemaTunnel {
         }
     }
 
-    protected Grafo<Integer> g;
+    protected GrafoNoDirigido<Integer> g;
     protected CSVReader reader;
     protected ArrayList<IntegerPair> resultado = new ArrayList<>();
 
@@ -53,16 +53,14 @@ public class ProblemaTunnel {
         for (Iterator<Integer> it = g.obtenerVertices(); it.hasNext();){
             Integer estacionActual = it.next();
 
-            estacionesVisitadas.add(estacionActual);
             findMinimumPath(estacionActual,0,estacionesVisitadas,new ArrayList<>(), new ArrayList<>());
             estacionesVisitadas.remove(estacionActual);
         }
 
-
         this.resultado.forEach(x -> {
-            if (!result.contains(x)) {
+            if (!result.contains(x))
                 result.add(x);
-            }
+
         });
 
         result.forEach(x->arcosUtilizados.add(g.obtenerArco(x.first,x.second)));
@@ -70,14 +68,12 @@ public class ProblemaTunnel {
     }
 
     private void findMinimumPath(Integer estacionActual,Integer currentLength,ArrayList<Integer> estacionesVisitadas, ArrayList<Arco<?>> currentPath, ArrayList<IntegerPair> tuneles){
-        iteraciones++;
 
-        if (!estacionesVisitadas.contains(estacionActual))
-            estacionesVisitadas.add(estacionActual);
+        estacionesVisitadas.add(estacionActual);
 
-        if (currentLength > minimumPathLength) return;
+        if (currentLength >= minimumPathLength) return;
 
-        if (estacionesVisitadas.size() == g.cantidadVertices()){
+        if (estacionesVisitadas.stream().distinct().toList().size() == g.cantidadVertices()){
             if (currentLength < minimumPathLength){
                 resultado.clear();
                 resultado.addAll(tuneles);
@@ -85,13 +81,14 @@ public class ProblemaTunnel {
                 return;
             }
         }
+        iteraciones++;
         for(Iterator<Arco<Integer>> it = g.obtenerArcos(estacionActual); it.hasNext();){
 
             Arco<?> currentEdge = it.next();
 
             if (!currentPath.contains(currentEdge)){
 
-                IntegerPair tunnel = new IntegerPair(currentEdge.getVerticeDestino(),currentEdge.getVerticeOrigen());
+                IntegerPair tunnel = new IntegerPair(currentEdge.getVerticeOrigen(),currentEdge.getVerticeDestino());
 
                 if (!tuneles.contains(tunnel))
                     currentLength += (Integer) currentEdge.getEtiqueta();
@@ -100,8 +97,7 @@ public class ProblemaTunnel {
                 currentPath.add(currentEdge);
 
                 findMinimumPath(currentEdge.getVerticeDestino(),currentLength,estacionesVisitadas,currentPath,tuneles);
-                if (estacionVisitada(estacionActual,tuneles))
-                    estacionesVisitadas.remove((Integer)currentEdge.getVerticeDestino());
+                estacionesVisitadas.remove((Integer) currentEdge.getVerticeDestino());
 
                 tuneles.remove(tunnel);
                 currentPath.remove(currentEdge);
@@ -111,13 +107,7 @@ public class ProblemaTunnel {
 
             }
         }
-    }
 
-    private Boolean estacionVisitada(Integer estacion, ArrayList<IntegerPair> tuneles){
-        for (IntegerPair p: tuneles){
-            if (p.first == estacion || p.second == estacion) return true;
-        }
-        return false;
     }
 
     public Integer getIteraciones(){
@@ -129,8 +119,54 @@ public class ProblemaTunnel {
     }
 
 
-   /* public ArrayList<Arco<?>> greedySolution () {
+    public ArrayList<Arco<?>> greedySolution () {
+        ArrayList<Arco<?>> arcos = g.getAllEdges();
+        HashSet<Integer> nodos = new HashSet<>();
+        ArrayList<Arco<?>> solucion = new ArrayList<>();
+        Arco<?> primerNodo = arcos.get(0);
+        nodos.add(primerNodo.getVerticeDestino());
+        nodos.add(primerNodo.getVerticeOrigen());
+        solucion.add(primerNodo);
+
+/*
+        Este loop permite encontrar mejores caminos a costo de tiempo de computacion. Podria ser reemplazado por el que se encuentra debajo.
+* */
+        for(int i =0; i< g.cantidadArcos(); i++){
+            for (Arco<?> x : arcos){
+                iteraciones++;
+                if( nodos.contains(x.getVerticeOrigen()) && !nodos.contains(x.getVerticeDestino())){
+                    solucion.add(x);
+                    nodos.add(x.getVerticeDestino());
+                    break;
+                }
+            }
+        }
+
+
+/*
+       Al reemplazar el loop ubicado encima de este por el loop comentado, se pueden reducir significativamente la cantidad de iteraciones pero reduciendo la eficacia de los caminos encontrados.
+*/
+
+/*       arcos.forEach(x -> {
+            iteraciones++;
+            if( nodos.contains(x.getVerticeOrigen()) && !nodos.contains(x.getVerticeDestino())){
+                solucion.add(x);
+                nodos.add(x.getVerticeDestino());
+
+            }
+        });*/
+
+        AtomicReference<Integer> longitud = new AtomicReference<>(0);
+        solucion.forEach(x -> {
+            longitud.updateAndGet(v -> v + ((Integer) x.getEtiqueta()));});
+        if (nodos.size() == this.g.cantidadVertices()){
+            this.minimumPathLength = longitud.getPlain();
+            return solucion;
+        }
+        else {
+            this.minimumPathLength = -1;
+            return null;
+        }
 
     }
-*/
 }
